@@ -4,9 +4,9 @@ __author__ = 'Randolph'
 
 class Config(object):
     def __init__(self):
-        self.TRAININGSET_DIR = '../data/Train.json'
-        self.VALIDATIONSET_DIR = '../data/Validation.json'
-        self.TESTSET_DIR = '../data/Test.json'
+        self.TRAININGSET_DIR = '../data/train_sample.json'
+        self.VALIDATIONSET_DIR = '../data/validation_sample.json'
+        self.TESTSET_DIR = '../data/test_sample.json'
         self.NEG_SAMPLES = '../data/neg_sample.pickle'
         self.MODEL_DIR = 'runs/'
         self.cuda = False

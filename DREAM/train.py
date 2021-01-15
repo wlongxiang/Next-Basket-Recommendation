@@ -83,7 +83,7 @@ def train():
         model.train()  # turn on training mode for dropout
         dr_hidden = model.init_hidden(Config().batch_size)
         train_loss = 0
-        start_time = time.clock()
+        start_time = time.time()
         num_batches = ceil(len(train_data) / Config().batch_size)
         for i, x in enumerate(dh.batch_iter(train_data, Config().batch_size, Config().seq_len, shuffle=True)):
             uids, baskets, lens = x
@@ -102,10 +102,10 @@ def train():
 
             # Logging
             if i % Config().log_interval == 0 and i > 0:
-                elapsed = (time.clock() - start_time) / Config().log_interval
+                elapsed = (time.time() - start_time) / Config().log_interval
                 cur_loss = train_loss.item() / Config().log_interval  # turn tensor into float
                 train_loss = 0
-                start_time = time.clock()
+                start_time = time.time()
                 logger.info('[Training]| Epochs {:3d} | Batch {:5d} / {:5d} | ms/batch {:02.2f} | Loss {:05.4f} |'
                             .format(epoch, i, num_batches, elapsed, cur_loss))
 
@@ -113,7 +113,7 @@ def train():
         model.eval()
         dr_hidden = model.init_hidden(Config().batch_size)
         val_loss = 0
-        start_time = time.clock()
+        start_time = time.time()
         num_batches = ceil(len(validation_data) / Config().batch_size)
         for i, x in enumerate(dh.batch_iter(validation_data, Config().batch_size, Config().seq_len, shuffle=False)):
             uids, baskets, lens = x
@@ -122,7 +122,7 @@ def train():
             val_loss += loss.data
 
         # Logging
-        elapsed = (time.clock() - start_time) * 1000 / num_batches
+        elapsed = (time.time() - start_time) * 1000 / num_batches
         val_loss = val_loss.item() / num_batches
         logger.info('[Validation]| Epochs {:3d} | Elapsed {:02.2f} | Loss {:05.4f} |'
                     .format(epoch, elapsed, val_loss))
