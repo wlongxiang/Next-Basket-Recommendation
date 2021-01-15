@@ -145,6 +145,7 @@ def train():
             dynamic_user, _ = model(baskets, lens, dr_hidden)
             for uid, l, du in zip(uids, lens, dynamic_user):
                 scores = []
+                # we use the last output as user representation
                 du_latest = du[l - 1].unsqueeze(0)
 
                 # calculating <u,p> score for all test items <u,p> pair
