@@ -57,12 +57,12 @@ class DRModel(torch.nn.Module):
             embed_baskets = torch.Tensor(self.config.seq_len, self.config.embedding_dim)
             for (j, basket) in enumerate(user):  # shape of user: [seq_len, indices of product]
                 basket = torch.LongTensor(basket).resize_(1, len(basket))
-                print(basket.shape)
+                # print(basket.shape)
                 basket = self.encode(torch.autograd.Variable(basket))  # shape: [1, len(basket), embedding_dim]
-                print(basket.shape)
+                # print(basket.shape)
                 # by now, we have each item vector in the basket, each row is an item vector in basket matrix
                 basket = self.pool(basket, dim=1)
-                print(basket.shape)
+                # print(basket.shape)
                 basket = basket.reshape(self.config.embedding_dim)
                 embed_baskets[j] = basket  # shape:  [seq_len, 1, embedding_dim]
             # Concat current user's all baskets and append it to users' basket sequence
