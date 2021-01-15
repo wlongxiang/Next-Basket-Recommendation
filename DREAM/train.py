@@ -50,6 +50,7 @@ def train():
     def bpr_loss(uids, baskets, dynamic_user, item_embedding):
         """
         Bayesian personalized ranking loss for implicit feedback.
+        For an intro on BPR: https://towardsdatascience.com/recommender-system-using-bayesian-personalized-ranking-d30e98bba0b9
 
         Args:
             uids: batch of users' ID
@@ -62,7 +63,7 @@ def train():
             du_p_product = torch.mm(du, item_embedding.t())  # shape: [pad_len, num_item]
             loss_u = []  # loss for user
             for t, basket_t in enumerate(bks):
-                if basket_t[0] != 0 and t != 0:
+                if basket_t[0] != 0 and t != 0: # wht skipping the first item??
                     pos_idx = torch.LongTensor(basket_t)
 
                     # Sample negative products
@@ -86,6 +87,8 @@ def train():
         start_time = time.time()
         num_batches = ceil(len(train_data) / Config().batch_size)
         for i, x in enumerate(dh.batch_iter(train_data, Config().batch_size, Config().seq_len, shuffle=True)):
+            # baskets are padded to seq_length = 12, with [0]
+            # lens is a list of length corresponding to how many real baskets are
             uids, baskets, lens = x
             model.zero_grad()  # 如果不置零，Variable 的梯度在每次 backward 的时候都会累加
             dynamic_user, _ = model(baskets, lens, dr_hidden)

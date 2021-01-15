@@ -76,6 +76,9 @@ class DRModel(torch.nn.Module):
 
         # shape: [batch_size, true_len(before padding), embedding_dim]
         dynamic_user, _ = torch.nn.utils.rnn.pad_packed_sequence(output, batch_first=True)
+        # follow below for intro into sequence padding and packing
+        # important note: the batch_sizes list record num of elements column wise, in RNN terms, time step wise
+        # https://stackoverflow.com/questions/51030782/why-do-we-pack-the-sequences-in-pytorch
         return dynamic_user, h_u
 
     def init_weight(self):
